@@ -192,16 +192,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-08-01 22:34:09" itemprop="dateCreated datePublished" datetime="2022-08-01T22:34:09+08:00">2022-08-01</time>
+              <time title="创建时间：2022-08-01 22:34:09 / 修改时间：22:41:22" itemprop="dateCreated datePublished" datetime="2022-08-01T22:34:09+08:00">2022-08-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-26 22:14:59" itemprop="dateModified" datetime="2022-07-26T22:14:59+08:00">2022-07-26</time>
-              </span>
 
           
 
@@ -214,108 +208,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>1、Java 中的 final 关键字有哪些用法？ </p>
+          <p> -–<br>title: 秋招笔记之 Java 基础 # 添加博文标题<br>categories: JavaSE # 添加博文分类<br>tags: tags # 添加博文标签<br>-– </p>
+<p>1、Java 中的 final 关键字有哪些用法？ </p>
 <p>​	final关键字修饰类、方法、变量（包括成员变量和局部变量）</p>
 <p>​	1、修饰类时使这个类无法被继承【final类中的变量可以认为设置，但是方法会被隐式指定为final方法】</p>
 <p>​	2、修饰方法时使用final可以使得集成该类的类无法修改此方法的含义【private方法会被隐式指定为final方法】</p>
 <p>​	3、修饰变量时使用：修饰基本数据类型，表示该数在初始化后就无法修改</p>
 <p>​										 修饰引用类型，表明该变量初始化后就无法指向其他对象</p>
-<p>2、final, finally, finalize 的区别</p>
-<p>​	finally：异常处理的一部分，只能存在于try&#x2F;catch语句中，finally中的代码表示一定会被执行</p>
-<p>​	finalize：垃圾收集器确定这个对象有没有被引用时，调用这个对象的finalize方法让下次gc时回收垃圾</p>
-<p>3、字符型常量和字符串常量的区别?（字符类型 char 、字符串类型 String）</p>
-<p>​		字符常量用单引号，字符串常量用双引号； 字符常量相当于一个整型值( ASCII 值),可以参加表达式运算，字符串常量代表一个地址值；字符常量 char 只占 2 个字节; 字符串常量占若干个字节。</p>
-<p>4、什么是B&#x2F;S架构？什么是C&#x2F;S架构 </p>
-<p>​	b&#x2F;s：broswer-server 浏览器服务器架构，比如所有的网站都是bs架构</p>
-<p>​	c&#x2F;s：client-server 客户端服务器架构，比如存在和服务器通信行为的应用等都算cs架构</p>
-<p>5、Java中的继承是单继承还是多继承 </p>
-<p>​	java不支持多继承，但是支持多重继承。即一个类不能继承至多个类，但是可以多重继承，即A-&gt;B-&gt;C</p>
-<p>6、ArrayList和LinkedList区别 </p>
-<p>​	1、前者底层是动态数组，后者底层数据结构为链表</p>
-<p>​	2、随机访问时arraylist的效率更高【动态数组】，增删操作的时候后者linkedlist效率更高【链表】</p>
-<p>​	3、自由性不同，前者手动设置固定容量【默认10+扩容1.5倍】，创建后添加数据。后者动态随着数据量变化而变化</p>
-<p>​	4、主要开销不同</p>
-<p>7、如何实现对象克隆？ </p>
-<p>​	浅克隆和深克隆：浅克隆不支持引用类型变量的复制，仅仅克隆的地址，而深克隆支持引用类型变量的复制</p>
-<p>​	浅克隆：实现cloneable接口。仅对象的地址不一样，对象中引用类型成员变量的地址都没变化</p>
-<p>​	深克隆：覆盖cloneable接口的clone方法实现或者通过序列化的方式实现【serializable接口】。</p>
-<p>8、什么是字节码？采用字节码的好处是什么？ </p>
-<p>​	java程序经过编译之后产生的.class文件，不面向平台只面向虚拟机。字节码能够被jvm识别，从而实现java程序的跨平台性。</p>
-<p>​	将java程序编译成字节码，不同平台的虚拟机可以识别同一份字节码并将其解释为机器码。 在一定程度上解决了传统解释型语言执行效率低的问题，同时又保留了解释型语言可移植的特点 </p>
-<p>9、标识符的命名规则。 </p>
-<p>​	不能数字打头，中间不能有空格，不能含有特殊符号，但是中间可以用下划线连接，不能使用关键字。</p>
-<p>10、String 是最基本的数据类型吗？ </p>
-<p>​	不是，String属于引用类型。java中基本数据类型有四类八种：整数类（byte、short、int、long）、浮点类（float、double）、字符类（char）、布尔型（boolean）</p>
-<p>11、<a href="">排序</a>都有哪几种方法？请列举</p>
-<p>​	快速排序，冒泡排序，选择排序，归并排序，堆排序。。。</p>
-<p>12、双亲委托模型 </p>
-<p>​	当一个字节码文件需要被加载时，会从下到上【AppClassLoader-&gt;ExtClassLoader-&gt;BootstrapClassLoader】依次检查该类加载器是否加载过该字节码文件，并不会选择自己加载。如果到了最顶部发现都没有加载过该class文件，则从上到下依次判断自己能否加载该class文件，可以加载直接加载。如果到最下面发现没有加载器能够加载此class文件，则直接报错classnotfound。</p>
-<p>​	好处：一定程度防止修改系统级别的类，从上到下检查的时候修改了系统类的实现，但是一般的类都被下层的加载器加载过了，所以上层的加载器一般没有机会再去加载，从一定程度上防止了危险代码的植入。</p>
-<p>13、java中有没有指针？ </p>
-<p>​	java中没有指针，但是又处处是指针。</p>
-<p>​	java中除了基本数据类型，其他都是引用类型，引用类型的本质就是指针，引用类型的对象实例都是被创建在堆内存上的。</p>
-<p>14、Java中的异常体系 </p>
-<p>​	异常异常体系分为：Error 错误 和 Exception 异常 ，Exception 异常分为编译时异常和运行时异常。</p>
-<p>​		java.lang.Throwable</p>
-<p>​				|—–java.lang.Error:一般不编写针对性的代码进行处理。</p>
-<p>​				|—–java.lang.Exception:可以进行异常的处理</p>
-<p>​						|——编译时异常(checked)</p>
-<p>​								|—–IOException</p>
-<p>​								|—–FileNotFoundException</p>
-<p>​								|—–ClassNotFoundException</p>
-<p>​						|——运行时异常(unchecked,RuntimeException)</p>
-<p>​								|—–NullPointerException</p>
-<p>​								|—–ArrayIndexOutOfBoundsException</p>
-<p>​								|—–ClassCastException</p>
-<p>​								|—–NumberFormatException</p>
-<p>​								|—–InputMismatchException</p>
-<p>​								|—–ArithmeticException</p>
-<p>15、String、StringBuffer、StringBuilder有什么区别？ </p>
-<p>​	string 和 stringbuffer：</p>
-<p>​	string 是不可变类，一旦一个对象被创建以后，包含在这个对象中的字符序列无法改变。修改string 对象或者重新给他赋值时，仅仅是生成一个新的实例对象，然后将引用指向新对象，原来的对象依旧存在，并且如果不用的话会被gc回收。</p>
-<p>​	stringbuffer代表一个字符序列可变的字符串，创建一个stringbuffer对象后，通过其自带的方法可以改变该对象的字符序列，在原来的字符序列上修改。一旦最终生成想要的字符串，可以调用tostring方法生成string对象。</p>
-<p>​	stringbuffer 和 stringbuilder：</p>
-<p>​	两者基本相似，但是stringbuffer是线程安全的【加了synchronized锁】，性能稍微比stringbuilderd略低。</p>
-<p>16、equals与&#x3D;&#x3D;的区别 </p>
-<p>​	1、前者方法后者操作符，所以equals可以重写，&#x3D;&#x3D;含义不变</p>
-<p>​	2、对于基本数据类型，&#x3D;&#x3D;比较值；对于引用数据类型，&#x3D;&#x3D;比较对象类型地址；</p>
-<p>​	3、equals不能判断基本数据类型，只能判断两个对象相等；</p>
-<p>​		3.1、重写了equals方法：一般判断对象中属性是否相等</p>
-<p>​		3.2、没有重写equals方法：等价于&#x3D;&#x3D;比较对象</p>
-<p>17、什么是JDK？什么是JRE? </p>
-<p>​	java development kit 包含了 java runtime envirnment</p>
-<p>​	java开发工具包，程序员使用java语言编写java程序所需的开发工具包【包含jre，javac&#x2F;java等工具，还有api】</p>
-<p>​	jre是java运行环境。包含了jvm，java基础类库。一般面向于运行java程序的用户使用</p>
-<p>18、hashCode与equals </p>
-<p>​	hashcode定义在object类中，所以所有的java任何类中都包含hashcode方法。</p>
-<p>​	两个对象相等，则其hashcode一定相同；但是如果两个对象的hashcode相同，这两个对象未必相等。所以equals方法被重写时，hashcode方法也需要被重写。</p>
-<p>19、面向对象和面向过程的区别 </p>
-<p>​	面向对象是高度实物抽象化，面向过程是自顶向下编程。</p>
-<p>20、HashMap和Hashtable的区别？</p>
-<p>​		HashMap 线程不安全，效率高，存储 null 的 key 和 value，jdk8 之后底层结构是 数组+链表+红黑树，初始容量是16，扩容机制是扩容两倍</p>
-<p>​		Hashtable 线程安全（所有操作通过synchronized锁保护），效率低，底层是 Entry 数组，初始容量是11，扩容机制是扩大两倍加一</p>
-<p>21、HashMap的底层实现原理？（HaspMap的数组也叫做Hash桶）</p>
-<p>​	底层基于散列法&#x2F;哈希法的原理，首先使用put，get 存放和获取对象。</p>
-<p>​	当我们给put()方法传递键和值时，我们先对键调用hashCode()方法，返回的hashCode用于找到bucket位置来储存Entry对象，当发生哈希碰撞（哈希值相等，数值不相等），对象将会储存在链表节点中。jdk8之后，当链表长度&gt;8，且长度大于64，此时数组+链表的存储结构改为红黑树。</p>
-<p>​	当我们调用get()方法，HashMap会使用键对象的hashcode找到bucket位置，两个值对象储存在同一个bucket，会调用keys.equals()方法去找到链表中正确的节点，最终找到要找的值对象。</p>
-<p>22、抽象类和接口的区别</p>
-<p>​	抽象类和接口都不能实例化，需要通过 extend 抽象类重写或者 implement 实现。</p>
-<p>​	都可以被继承，但是抽象类是单继承，接口是多继承。</p>
-<p>​	为什么：接口不能有构造器，抽象类可以有。</p>
-<p>23、CurrentHashMap 和 Hashtable的异同，CurrentHashMap 的底层</p>
-<p>​	Hashtable 和 HashMap 不能兼顾效率和线程安全两方面。但是 CurrentHashMap 兼顾了，并发HashMap 是线程安全的，效率虽然差于 Hashmap 但是 比 HashTable 高。原因是：CurrentHashMap 采用了更加高效的分段锁机制。</p>
-<p>24、如果 HashMap 的大小超过了负载因子(load factor)定义的容量，怎么办</p>
-<p>​	默认的负载因子大小为0.75，也就是说，当一个map填满了75%的bucket时候，和其它集合类(如ArrayList等)一样，将会创建原来HashMap大小的两倍的bucket数组，来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因为它调用hash方法找到新的bucket位置。</p>
-<p>25、重写和重载的区别？重载中方法的返回值可以相同吗？</p>
-<p>​	重写是继承后重写父类的方法，重载是同一个同名方法但是不同参数。</p>
-<p>​	返回值类型可以相同也可以不相同，无法以返回型别作为重载函数的区分标准。</p>
-<p>26、Java int 和 Integer 的区别，怎样比较 int 和 Integer 类型的值是否相等。</p>
-<p>​	基本数据类型，不具备 Java 中类的特点，而 Java 中绝大部分方法或类都是用来处理类类型对象的，为了弥补引入了包装类。int 的包装类是 Integer。</p>
-<p>​	Integer 拆箱后用 &#x3D;&#x3D; 与 int 比较 ，但是需要 int Integer 在-128 至 127 范围内的赋值。</p>
-<p>27、说一下JAVA中的泛型?</p>
-<p>​		泛型就是类似于一个标签 即参数类型化，允许在定义类接口时通过标识符表示类中的属性的类型或者是某个方法的返回值及参数类型。可以用在类、接口和方法上。</p>
-<p>​		举例：创建了一个容器之后，我们可以往里面添加任何类型的数据，当添加的两种类型不同时编译时会报错，用泛型规定了类型，就减少了麻烦和错误的可能。还能减少强转，拆箱装箱，提高性能。</p>
-
+<p>2、final, finally, finalize 的区别
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/01/%E7%A7%8B%E6%8B%9B%E7%AC%94%E8%AE%B0%E4%B9%8BJava%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
