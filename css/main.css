@@ -1168,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #5d7c94;
+  background: #2f8fff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1546,14 +1546,6 @@ pre .javascript .function {
 .use-motion .pagination,
 .use-motion .comments {
   opacity: 0;
-}
-.use-motion .post-body p a {
-  color: #0593d3;
-  border-bottom: none;
-}
-.use-motion .post-body p a:hover {
-  color: #0477ab;
-  text-decoration: underline;
 }
 .use-motion .post-header {
   opacity: 0;
@@ -1976,6 +1968,14 @@ pre .javascript .function {
   list-style: none;
   margin: 2em 0 0;
   padding: 0.5em 1em;
+}
+.post-body p a {
+  color: #0593d3;
+  border-bottom: none;
+}
+.post-body p a:hover {
+  color: #0477ab;
+  text-decoration: underline;
 }
 .category-all-page .category-all-title {
   text-align: center;
