@@ -194,7 +194,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-08-02 19:38:18 / 修改时间：19:38:00" itemprop="dateCreated datePublished" datetime="2022-08-02T19:38:18+08:00">2022-08-02</time>
+              <time title="创建时间：2022-08-02 19:38:18 / 修改时间：19:41:17" itemprop="dateCreated datePublished" datetime="2022-08-02T19:38:18+08:00">2022-08-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,53 +218,14 @@
 
       
           <h1 id="数据库和缓存如何保持一致性"><a href="#数据库和缓存如何保持一致性" class="headerlink" title="数据库和缓存如何保持一致性"></a>数据库和缓存如何保持一致性</h1><h2 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h2><p>大量的访问请求使得数据库操作频繁，结果导致服务器性能下降，为了解决该问题可以引入<code>reids</code>，让其作为数据库的缓存。这样，在客户端请求数据时，能从缓存中读取就可以不必去数据库中读取，从而减轻数据库压力，提高服务器性能。但是如果数据发生变化，而数据又存在于数据库和<code>redis</code>中，此时就会产生数据一致性问题。</p>
-<h2 id="方案一：先更新数据库，再更新缓存"><a href="#方案一：先更新数据库，再更新缓存" class="headerlink" title="方案一：先更新数据库，再更新缓存"></a>方案一：先更新数据库，再更新缓存</h2><p>首先结论是该方案不能解决数据一致性问题，原因出在<strong>并发</strong>上。比如现在有 A 请求和 B 请求，这两个请求<strong>同时</strong>更新<strong>同一条</strong>数据，此时如果出现如下顺序：</p>
-<ol>
-<li>A 请求先将数据库数据更新为 1</li>
-<li>B 请求将数据库数据更新为 2</li>
-<li>B 请求将缓存更新为 2</li>
-<li>A 请求将缓存更新为 1</li>
-</ol>
-<p>此时，数据库中的数据为 2，而缓存中数据为 1，出现数据不一致的问题，所以该方案不成立。</p>
-<h2 id="方案二：-先更新缓存，再更新数据库"><a href="#方案二：-先更新缓存，再更新数据库" class="headerlink" title="方案二： 先更新缓存，再更新数据库"></a>方案二： 先更新缓存，再更新数据库</h2><p>该方案依然不成立，道理如方案一种的案例一样，只不过将数据库和缓存换一下位置，最后依然会出现数据不一致。</p>
-<p>ps：为什么不能选择更新缓存，而是需要直接删除？</p>
-<p>​	1.性能问题：在更新一些比较复杂的缓存的缓存时，往往需要消耗资源，导致缓存利用率不高。</p>
-<p>​	2.安全问题：在高并发情况下，更新缓存往往会造成数据不一致。</p>
-<h2 id="旁路缓存策略（Cache-Aside）"><a href="#旁路缓存策略（Cache-Aside）" class="headerlink" title="旁路缓存策略（Cache Aside）"></a>旁路缓存策略（Cache Aside）</h2><p>不更新缓存，而是删除缓存中的数据，然后，到读取数据时，发现缓存中没有数据后再去数据库中读取数据并更新到缓存中。</p>
-<p>此时又引申出一个问题，是先删除缓存再更新数据库还是先更新数据库再删除缓存。</p>
-<h2 id="方案三：-先删除缓存，再更新数据库"><a href="#方案三：-先删除缓存，再更新数据库" class="headerlink" title="方案三： 先删除缓存，再更新数据库"></a>方案三： 先删除缓存，再更新数据库</h2><p>结论是改方案不成立。假设有一用户年龄为20， A 请求更新该用户年龄为21，B 请求读取该用户年龄，此时出现如下顺序：</p>
-<ol>
-<li>A 请求删除缓存</li>
-<li>B 请求缓存未命中，读取数据库中年龄为 20，并将 20 更新到缓存中</li>
-<li>A 请求更新数据库中年龄为 21</li>
-</ol>
-<p>此时，数据库中年龄为 21，而缓存中数据为 20，出现数据不一致问题。对于此情况有如下解决方案：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 删除缓存</span><br><span class="line">redis.delKey(X)</span><br><span class="line"># 更新数据库</span><br><span class="line">db.update(X)</span><br><span class="line"># 睡眠</span><br><span class="line">Thread.sleep(N)</span><br><span class="line"># 再删除缓存</span><br><span class="line">redis.delKey(X)</span><br></pre></td></tr></table></figure>
-
-<p>睡眠操作主要是为了确保 A 请求在睡眠的时候， B 请求能够在这一段时间完成所有操作。最后再删掉缓存数据，所以 A 请求的睡眠时间要大于 B 请求<code>从数据库读数据+写入缓存</code>的时间。但是具体睡眠多久是个玄学问题，很难评估出来，所以这个方案也只是尽可能保证数据一致性而已，还是会有数据不一致的问题，因此更建议使用方案四。</p>
-<h2 id="方案四：-先更新数据库，再删除缓存"><a href="#方案四：-先更新数据库，再删除缓存" class="headerlink" title="方案四： 先更新数据库，再删除缓存"></a>方案四： 先更新数据库，再删除缓存</h2><p>假设开始年龄数据在缓存中不存在，A 请求读取年龄，B 请求更新年龄，此时出现如下顺序：</p>
-<ol>
-<li>A 请求缓存未命中，读取数据库中年龄为 20</li>
-<li>B 请求更新数据库年龄为 21</li>
-<li>B 请求删除缓存</li>
-<li>A 请求将 20 写入缓存</li>
-</ol>
-<p>此时，缓存中数据为 20， 而数据库中数据为 21，出现数据不一致问题。<strong>但是在实际中，这个问题出现的概率并不高，因为缓存的写入通常要远远快于数据库的写入，所以认为该方案是可以保证数据一致性的。</strong></p>
-<p>同时也可以给缓存加上过期时间，万一出现数据不一致，一旦数据过期被移除缓存，之后请求数据就需要从数据库中取数据，然后把数据同步到缓存中进而保持数据一致性。</p>
-<p>但是此时还存在其他问题，即删除缓存的操作不一定成功，这就会导致客户端得到的是未更新的数据。现在有如下两种方案解决这个问题。</p>
-<h3 id="1-重试机制"><a href="#1-重试机制" class="headerlink" title="1. 重试机制"></a>1. 重试机制</h3><p>引入消息队列，将要从缓存中删除的数据加入到消息队列中。</p>
-<ul>
-<li>如果应用删除缓存失败，就从消息队列中重新读取数据，然后再次删除缓存，这个就是重试机制。如果重试超过一定次数还是没有成功，就需要向业务层发送报错信息了。</li>
-<li>如果删除缓存成功，就要把数据从消息队列中移除，避免重复操作。</li>
-</ul>
-<h3 id="2-订阅-MySQL-binlog，再操作缓存"><a href="#2-订阅-MySQL-binlog，再操作缓存" class="headerlink" title="2. 订阅 MySQL binlog，再操作缓存"></a>2. 订阅 MySQL binlog，再操作缓存</h3><p>在数据库更新成功后就会产生一条变更日志，记录在 binlog 中。于是可以通过订阅 binlog 日志，拿到具体要操作的数据，然后再执行缓存删除。阿里巴巴的 Canal 中间件就是基于这个实现。</p>
-<p>Canal 模拟 MySQL 主从复制的交互协议，把自己伪装成一个 MySQL 从节点，向 MySQL 主节点发送 dump 请求，MySQL 收到请求后就会开始推送 binlog 给 Canal，Canal 解析 binlog 字节流后，转换为便于读取的结构化数据，供下游订阅使用。</p>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>如果在业务中对缓存命中率有很高的要求，此时就需要<code>更新数据库+更新缓存</code>的方案。为了解决数据不一致问题，现有提供如下两种做法：</p>
-<ol>
-<li>在更新缓存前先加个分布式锁，保证同一时间只有一个请求更新数据库和缓存，就不会产生并发问题了，但引入锁会对写入性能带来影响。</li>
-<li>在更新完缓存时，给缓存加上较短的过期时间，这样即使出现缓存不一致问题，缓存的数据也会很快过期，对业务还是可以接受的</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E6%80%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
