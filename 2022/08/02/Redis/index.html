@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1、Redis 是单线程的，如何提高多核 CPU 的利用率？  ​	在同一个服务器部署多个redis实例，并将它们当作不同的服务器使用。使用多个cpu，可以使用shard分片。 2、Redis 集群方案什么情况下会导致整个集群不可用？  ​	 有A，B，C三个节点的集群, 在没有复制模型的情况下, 如果节点B失败了，那么整个集群就会以为缺少5501-11000这个范围的槽而不可用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秋招笔记之Redis基础">
+<meta property="og:url" content="http://example.com/2022/08/02/Redis/index.html">
+<meta property="og:site_name" content="左红叶好老婆">
+<meta property="og:description" content="1、Redis 是单线程的，如何提高多核 CPU 的利用率？  ​	在同一个服务器部署多个redis实例，并将它们当作不同的服务器使用。使用多个cpu，可以使用shard分片。 2、Redis 集群方案什么情况下会导致整个集群不可用？  ​	 有A，B，C三个节点的集群, 在没有复制模型的情况下, 如果节点B失败了，那么整个集群就会以为缺少5501-11000这个范围的槽而不可用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-02T11:46:21.764Z">
+<meta property="article:modified_time" content="2022-08-02T11:46:02.418Z">
+<meta property="article:author" content="爱你的晶哥">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/08/02/Redis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>秋招笔记之Redis基础 | 左红叶好老婆</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">左红叶好老婆</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="fa fa-download fa-fw"></i>resources</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/02/Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="爱你的晶哥">
+      <meta itemprop="description" content="对不起宝宝">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="左红叶好老婆">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          秋招笔记之Redis基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-02 19:46:21 / 修改时间：19:46:02" itemprop="dateCreated datePublished" datetime="2022-08-02T19:46:21+08:00">2022-08-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>1、Redis 是单线程的，如何提高多核 CPU 的利用率？ </p>
+<p>​	在同一个服务器部署多个redis实例，并将它们当作不同的服务器使用。使用多个cpu，可以使用shard分片。</p>
+<p>2、Redis 集群方案什么情况下会导致整个集群不可用？ </p>
+<p>​	 有A，B，C三个节点的集群, 在没有复制模型的情况下, 如果节点B失败了，那么整个集群就会以为缺少5501-11000这个范围的槽而不可用。 <span id="more"></span></p>
+<p>3、Redis 是单进程单线程的？ </p>
+<p>​	单线程。</p>
+<p>4、什么是 Redis? </p>
+<p>​	Redis是一个开源的、高性能的、基于键值对的缓存与存储系统。非关系型数据库Nosql。通过提供多种键值数据类型来适应不同场景下的缓存与存储需求。</p>
+<p>5、简述Redis事务实现 </p>
+<p>​	事务开启后，一系列命令入队，这些命令放到一个命令队列中，不会因为用户的输入而立即执行。事务队列也是先进先出，当客户端发送exec指令，服务器就会执行队列中的命令。如果中间遇到错误，redis并不能回滚，而是会继续执行后续命令。</p>
+<p>6、Redis 的持久化机制是什么？各自的优缺点？ </p>
+<p>​	redis由于是存储在计算机内存之中，但是当内存断电或者redis重启后其中数据都会丢失，持久化机制就是为了保证redis在重启后数据不丢失。</p>
+<p>​	redis数据从内存中以某种形式同步到硬盘内，使得重启后根据硬盘中的记录恢复数据。</p>
+<p>​	持久化两种方式：RDB【Redis DataBase】和AOF【Append Only File】</p>
+<p>​		RDB方式在redis异常退出时，就会丢失最后一次快照之后更改的数据。</p>
+<p>​		AOF方式因为存储的是每一条命令，因此数据影响最小，但是占用空间更多并会影响redis的性能。</p>
+<p>7、Redis 提供了哪几种持久化方式？ </p>
+<p>​	RDB：通过快照完成，当符合一定条件时，redis会自动将内存中的所有数据生成一份副本存储在硬盘上，这个过程就是快照。</p>
+<p>​	AOF：使用redis存储非临时数据时，会将执行的每一条写命令追加到硬盘文件中【会降低性能】，用以降低进程终止导致的数据丢失。</p>
+<p>8、怎么理解 Redis 事务？ </p>
+<p>​	redis的事务是一组命令的集合。一个事务中的命令要么执行要么都不执行，和命令一样，事务也是redis中的最小执行单位。但是和关系型数据库不一样的是，redis无法严格做到acid属性，并且不支持rollback。但是配合watch命令实现乐观锁的操作，即在执行时检测到修改则放弃执行。</p>
+<p>9、Redis线程模型、单线程快的原因 </p>
+<p>​	redis单线程的。单线程快的原因一般是因为代码简单，并且没有多线程情况下各种加锁释放锁的消耗，更没有多线程情况下多线程切换导致的cpu的消耗问题。</p>
+<p>10、Redis的过期键的删除策略 </p>
+<p>​	定时删除、惰性删除和定期删除：</p>
+<p>​		定时删除：设置键过期时间的同时会创建一个定时器，让定时器在键的过期时间到来时，立即执行删除操作</p>
+<p>​		惰性删除：放任过期不管，但是每次从键空间获取该键时，检查是否过期，过期了则删除。没过期则返回。</p>
+<p>​		定期删除： 每隔一段时间程序就对数据库进行一次检查，删除里面的过期键。至于要删除多少过期键，以及</p>
+<p>要检查多少个数据库，则由算法决定。 </p>
+<p>11、redis数据淘汰机制：</p>
+<p>​	noeviction:返回错误当内存限制达到并且客户端尝试执行会让更多内存被使用的命令（大部分的写入指令，但DEL和几个例外）</p>
+<p>​	allkeys-lru: 尝试回收最少使用的键（LRU），使得新添加的数据有空间存放。</p>
+<p>​	volatile-lru: 尝试回收最少使用的键（LRU），但仅限于在过期集合的键,使得新添加的数据有空间存放。</p>
+<p>​	allkeys-random: 回收随机的键使得新添加的数据有空间存放。</p>
+<p>​	volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键。</p>
+<p>​	volatile-ttl: 回收在过期集合的键，并且优先回收存活时间（TTL）较短的键,使得新添加的数据有空间存放。</p>
+<p>12、RDB 和 AOF 机制 </p>
+<p>​	RDB：每隔一段时间，将内存中的数据写入硬盘。redis单独创建一个子进程来持久化，通过快照的方式。</p>
+<p>​	AOF：保存操作的命令，在redis重启时读取这个文件，重新执行新建，修改数据的命令以恢复数据。 </p>
+<p>13、Redis 集群写操作丢失的原因？ </p>
+<p>​	1、过期 key 被清理。<br>​	2、最大内存不足，导致 Redis 自动清理部分 key 以节省空间。<br>​	3、主库故障后自动重启，从库自动同步。<br>​	4、单独的主备方案，网络不稳定触发哨兵的自动切换主从节点，切换期间会有数据丢失。 </p>
+<p>14、<a href="">redis</a> 主从复制的核心原理 </p>
+<p>​	1、握手阶段，主从连接成功后，从节点将自身信息发送给主节点，发送sync命令。</p>
+<p>​	2、同步阶段，在主从连接成功后需要先同步数据【全量同步和部分同步】，数据达到一致才进入复制阶段。</p>
+<p>​	3、复制阶段，主节点在运行期间，执行的写命令传给从节点，从节点接受执行，达到复制数据的效果【异步复制】</p>
+<p>15、<a href="">redis</a>集群方案 </p>
+<p>​	twemproxy：以代理的身份接受请求并使用一致性哈希算法，将请求转接到具体redis，结果再返回。</p>
+<p>​	coids：和上面twemproxy基本一致， 但它支持在节点数量改变情况下，旧节点数据可恢复到新hash节点。</p>
+<p>​	redis cluster3.0：自带集群，分布式算法使用hash槽 </p>
+<p>16、Redis 的同步机制了解么？ 【有点类似于两种持久化方法】</p>
+<p>​	全量同步：常用于新的从节点首次同步数据，从节点发送要求，主节点发送响应后，主节点生产rdb快照并发送给从节点 。</p>
+<p>​	部分同步：常用于主从库断开连接时同步数据；建立连接后，主节点只需要将缓冲区中offset偏移量后面的命令发送给从节点【主节点会将执行的写命令都写入缓冲区】。</p>
+<p>17、Redis 事务相关的命令有哪几个？ </p>
+<p>​	multi：开始事务命令</p>
+<p>​	exec：提交事务命令</p>
+<p>​	watch：监控一个或者多个键，如果该键在事务执行期间修改，则事务不执行</p>
+<p>​	unwatch：取消监控</p>
+<p>18、修改配置不重启 Redis 会实时生效吗？ </p>
+<p>​	对运行实例，大多数配置可以通过config set命令修改，无需重启。</p>
+<p>​	但是如果config命令不支持的配置参数则需要重启，比如升级redis。</p>
+<p>19、如何实现集群中的 session 共享存储？ </p>
+<p>​	分布式部署服务器时，浏览器会请求不同的服务器造成session失效。</p>
+<p>​	使用共享session解决：一台服务器登录所生成的session可以与其他服务器共享，提供一个共享空间【redis】供几个服务器共同访问。</p>
+<p>​	主要实现就是配置 store-type：redis 	代码中的session会存储到redis中</p>
+<p>20、Redis 的内存用完了会发生什么？ </p>
+<p>​	 如果达到设置内存的上限，Redis的写命令会返回错误信息（但是读命令还可以正常返回。）</p>
+<p>​	 或者你可以将Redis当缓存来使用配置淘汰机制，当Redis达到内存上限时会冲刷掉旧的内容。 </p>
+<p>21、缓存雪崩、缓存穿透、缓存击穿 </p>
+<p>​	<strong>缓存穿透</strong>：请求从数据库查询一个数据库里没有的数据，故不写入缓存。这将导致每次查询这个不存在的数据都要到数据库查询，缓存失去了意义，就像被穿透了，导致数据库扛不住请求洪峰。</p>
+<p>​	解决：接口请求参数校验，最大程度过滤非法参数；数据库返回空值时可以啊将空值缓存到redis；使用布隆过滤器【布隆过滤器用于存储所有可能被访问的key，不存在的key直接过滤。存在的可以进一步查询数据库或者redis】。</p>
+<p>​	<strong>缓存击穿</strong>：一个热点的key，在缓存过期的一瞬间突然有大量请求同时过来，导致大量请求直接查询数据库，造成数据库请求量巨大压力骤增。</p>
+<p>​	解决：加互斥锁，热点key过期后，大量请求涌入只有第一个请求能获取锁并阻塞，在从数据库获取数据并写入redis缓存时释放锁，后续请求直接走缓存；设置缓存不过期或者让后台线程一直给热点数据缓存续期。</p>
+<p>​	<strong>缓存雪崩</strong>：大量的热点key过期时间相同，导致数据在同一时刻集体失效，造成数据库瞬时压力巨大。</p>
+<p>​	解决：将热点key的过期时间打散【过期时间加随机值】；加互斥锁；设置缓存不过期或者让后台线程一直给热点数据缓存续期；</p>
+<p>22、使用 Redis 有哪些好处？ 为什么使用Redis?</p>
+<p>​	1、redis数据库数据都存储在内存中，所以响应快速</p>
+<p>​	2、支持多种数据类型，可以满足各种数据结构体的需要</p>
+<p>​	3、操作都是原子性的，适合高并发</p>
+<p>​	4、redis可以在缓存【每个键可以设置生存时间TTL、限定数据占用空间】，消息队列中使用</p>
+<p>23、为什么Redis比较快，单线程就一定快吗？</p>
+<p>​	redis是在内存中的nosql数据库，单线程可以不用考虑多线程情况下各种锁的问题，代码也清晰而且也没有各种线程的切换来消耗cpu。</p>
+<p>24、Redis数据类型有哪些？	</p>
+<p>​	string字符串、list集合、set不可重复集合、zset带分数集合【排序集合】、hash键值对。</p>
+<p>25、Zset和Java的set有什么区别？Zset的底层实现是什么？</p>
+<p>​	Zset为有序集合类型，string类型元素集合，且不允许重复成员。</p>
+<p>​	不同的就是每个元素会关联一个double类型的分数，通过这个分数实现有序。</p>
+<p>​	zset底层使用哈希表和跳表实现</p>
+<p>26、Redis中zset跳表</p>
+<p>​	数组可以通过二分查找数据，但是插入数据麻烦；链表插入简单，但是查找麻烦</p>
+<p>​	这时候可以使用跳表skiplist来兼得以上两种数据结构的优点。</p>
+<p>​	跳表是一种多层级的链表结构。上层链表是相邻下层链表的子集，头节点的层数不小于其他节点的层数，每个节点【除了头节点】都有一个随机层数。</p>
+<p>​	skiplist中查找数据，需要从最高层开始查找。如果某一层后驱节点元素已经大于目标元素【或者不存在后驱节点】，则下降一层，从下一层当前位置继续查找，直到找到该数据。</p>
+<p>​	skiplist通过概率平衡实现近似平衡p叉树的数据存取效率。</p>
+<p>27、redis分布式锁【redis的string类型实现】</p>
+<p>​	setnx try_lock 1  返回1则加锁成功，返回0则失败		del try_lock 释放锁</p>
+<p>​	微服务架构下，多个应用服务要同时对同一条数据进行修改，要保证数据正确性，就只能有一个应用修改成功</p>
+<p>​	这时候就需要加锁： redis是一个单独的非业务服务，不会受到其他业务服务的限制，所有的业务服务都可以向redis发送写入命令，且只有一个业务服务可以写入命令成功，那么这个写入命令成功的服务即获得了锁，可以进行后续对资源的操作，其他未写入成功的服务，则进行其他处理。 </p>
+<p>​	如何避免死锁：设置key的过期时间，key过期自动删除【造成锁过期和释放其他服务锁的问题】</p>
+<p>​		锁过期：</p>
+<p>​		释放其他服务锁：	</p>
+<p>28、布隆过滤器</p>
+<p>​	用于解决缓存穿透的方案之一。主要就是在一个存在一定数量的集合中过滤一个元素，判断该元素是否一定不在集合中或者可能在集合中。</p>
+<p>​	优点：空间和时间效率都比一般算法好很多。缺点：存在一定的识别率问题和删除困难。</p>
+<p>​	原理：几个hash算法和一张bit数组，一个key通过几个hash算法得到的值作为索引在bit数组中对应的默认值都从0修改为1，当一个key经过几个hash算法后得到的值跟数组中对应位置的值对比发现都为1时，就判断这个key在集合中。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>爱你的晶哥
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2022/08/02/Redis/" title="秋招笔记之Redis基础">http://example.com/2022/08/02/Redis/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/08/02/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E5%A6%82%E4%BD%95%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E6%80%A7/" rel="prev" title="数据库和缓存保持一致性">
+      <i class="fa fa-chevron-left"></i> 数据库和缓存保持一致性
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="爱你的晶哥"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">爱你的晶哥</p>
+  <div class="site-description" itemprop="description">对不起宝宝</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/JingHyy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;JingHyy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/18957646?spm_id_from=333.1007.0.0" title="bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;18957646?spm_id_from&#x3D;333.1007.0.0" rel="noopener" target="_blank"><i class="fa fa-bold fa-fw"></i>bilibili</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://javaguide.cn/" title="https:&#x2F;&#x2F;javaguide.cn&#x2F;" rel="noopener" target="_blank">JavaGuide</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.programmercarl.com/" title="https:&#x2F;&#x2F;www.programmercarl.com&#x2F;" rel="noopener" target="_blank">Leetcode-master</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; Sun Jul 31 2022 08:00:00 GMT+0800 (中国标准时间) – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爱你的晶哥</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
