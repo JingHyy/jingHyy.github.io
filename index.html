@@ -192,10 +192,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-17 23:52:29 / 修改时间：23:52:25" itemprop="dateCreated datePublished" datetime="2022-08-17T23:52:29+08:00">2022-08-17</time>
+              <time title="创建时间：2022-08-17 23:52:29" itemprop="dateCreated datePublished" datetime="2022-08-17T23:52:29+08:00">2022-08-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:05:00" itemprop="dateModified" datetime="2022-08-18T15:05:00+08:00">2022-08-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -217,7 +223,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>​		Mysql 知识点大全，完善中 ing…
+          <h1 id="MySQL-数据库"><a href="#MySQL-数据库" class="headerlink" title="MySQL 数据库"></a>MySQL 数据库</h1><h2 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h2><h3 id="执行一条-select-语句，期间发生什么"><a href="#执行一条-select-语句，期间发生什么" class="headerlink" title="执行一条 select 语句，期间发生什么"></a>执行一条 select 语句，期间发生什么</h3><p>​	<strong>连接器</strong></p>
+<ul>
+<li>建立连接：与客户端进行 TCP 三次握手建立连接；</li>
+<li>管理连接：校验客户端的用户名和密码，如果用户名或密码不对，则会报错；</li>
+<li>校验用户身份：如果用户名和密码都对了，会读取该用户的权限，后面的权限逻辑判断都基于此时读取到的权限；</li>
+</ul>
+<p>​	<strong>查询缓存</strong>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/08/17/MySQL%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/#more" rel="contents">
@@ -267,10 +279,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-17 23:51:14 / 修改时间：23:51:57" itemprop="dateCreated datePublished" datetime="2022-08-17T23:51:14+08:00">2022-08-17</time>
+              <time title="创建时间：2022-08-17 23:51:14" itemprop="dateCreated datePublished" datetime="2022-08-17T23:51:14+08:00">2022-08-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:05:12" itemprop="dateModified" datetime="2022-08-18T15:05:12+08:00">2022-08-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -297,115 +315,15 @@
 <p>​	原子类：atomic子包中的原子操作类，能够线程安全的更新变量。</p>
 <p>​	线程池：新增的内置线程池，ThreadPoolExecutor常规线程池，子类也能够实现定时任务的线程池。</p>
 <p>​	并发容器：分为三类，一通过降低锁粒度来提高并发性能的Concurrent类；二采用写时复制技术实现的copyOnWrite类；三是Lock实现的的阻塞队列，这些类都实现了BlockingQueue接口。</p>
-<p>​	同步工具：类似的 <strong>Semaphore</strong>类代表信号量,可以控制同时访问特定资源的线程数量；<strong>CountDownLatch</strong>类则允许一个或多个线程等待其他线程完成操作；<strong>CyclicBarrier</strong>可以让一组线程到达一个屏障时被阻塞,直到最后一个线程到达屏障时,屏障才会打开,所有被屏障拦截的线程才会继续运行。 </p>
-<h5 id="1、Thread、Runable的区别"><a href="#1、Thread、Runable的区别" class="headerlink" title="1、Thread、Runable的区别"></a>1、Thread、Runable的区别</h5><p>​	Runable 是接口，而 Thread 是类。如果当前需要实现多线程的类已经继承了另外一个类，就无法通过继承thread类来实现线程了【java 不支持多继承】。</p>
-<h6 id="Callable-和-Runnable-的区别？"><a href="#Callable-和-Runnable-的区别？" class="headerlink" title="**#**Callable 和 Runnable 的区别？"></a>**#**Callable 和 Runnable 的区别？</h6><p>​		两者类似，但是Runnable不会返回结果，也无法抛出返回结果的异常；Callable更强大一些，可以返回值【可以认为Callable是带有回调的Runnable，这个异步执行任务的返回值可以被Future拿到】</p>
-<p>​		并且使用的方法不一样，前者使用call方法，后者使用run方法</p>
-<h6 id="那么Future又是什么呢？"><a href="#那么Future又是什么呢？" class="headerlink" title="**#**那么Future又是什么呢？"></a>**#**那么Future又是什么呢？</h6><p>​		表示异步任务，是还没有完成的任务给出的未来结果。所以说Callable用于产生结果，Future用于获取结果。 </p>
-<h5 id="2、JAVA-线程锁机制是怎样的？偏向锁、轻量级锁、重量级锁有什么区别？锁机制是如何升级的？"><a href="#2、JAVA-线程锁机制是怎样的？偏向锁、轻量级锁、重量级锁有什么区别？锁机制是如何升级的？" class="headerlink" title="2、JAVA 线程锁机制是怎样的？偏向锁、轻量级锁、重量级锁有什么区别？锁机制是如何升级的？"></a>2、JAVA 线程锁机制是怎样的？偏向锁、轻量级锁、重量级锁有什么区别？锁机制是如何升级的？</h5><p>​	锁主要存在四种状态，依次是：无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态，锁可以从偏向锁升级到轻量级锁，再升级的重量级锁。但是锁的升级是单向的，也就是说只能从低到高升级，不会出现锁的降级。 </p>
-<p>​	<strong>无锁状态当有一个线程访问同步块时会升级成偏向锁；偏向锁碰到有锁竞争时，就升级为轻量级锁；轻量级锁在锁竞争时如果自旋十次失败则膨胀成重量级锁；</strong></p>
-<p>​	重量级锁：Monitor依赖于底层操作系统的Lock实现，而操作系统实现线程之间的切换需要从用户态转换到核心态，导致其切换成本较高，因此称为重量级锁【多线程竞争情况下，轻量级锁会膨胀成重量级锁】</p>
-<p>​	轻量级锁：相对于使用操作系统互斥量来实现的重量级锁而言，在没有多线程竞争的前提下，减少传统的重量级锁产生的性能消耗。【轻量级锁不是用来代替重量级锁的】【底层依赖cas】</p>
-<p>​	偏向锁：专门为单个线程而生，不需要进行同步操作，只需要一次cas操作， 只要不发生竞争，这个对象就归该线程所有。 </p>
-<h5 id="3、-Volatile和Synchronized有什么区别？Volatile能不能保证线程安全-DCL-Double-Check-Lock-单例为什么要加Volatile"><a href="#3、-Volatile和Synchronized有什么区别？Volatile能不能保证线程安全-DCL-Double-Check-Lock-单例为什么要加Volatile" class="headerlink" title="3、 Volatile和Synchronized有什么区别？Volatile能不能保证线程安全?DCL(Double Check Lock)单例为什么要加Volatile?"></a>3、 Volatile和Synchronized有什么区别？Volatile能不能保证线程安全?DCL(Double Check Lock)单例为什么要加Volatile?</h5><p>​	都可以保证可见性和禁止指令重排【前者通过内存屏障，后者通过加锁实现】；</p>
-<p>​	区别在于：前者只能用在变量，后者可以用在变量，方法，类；</p>
-<p>​						后者可以保证原子性；【所以后者不能保证线程安全】</p>
-<p>​						后者可能会造成线程阻塞；</p>
-<p>​						后者标记的变量可以被编译器优化。</p>
-<p>​	DCL(Double Check Lock)单例：双重锁定检查的单例模式；</p>
-<p>​	<strong>单例模式中，如果只有synchronized关键字，修饰的变量会被jvm优化，可能会被打乱顺序，造成初始化对象失败，因此instance变量需要加volatile关键字禁止其指令重排序</strong>；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">Singleton</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">null</span> == instance) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span>(<span class="literal">null</span> == instance) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="4、线程池中线程复用原理"><a href="#4、线程池中线程复用原理" class="headerlink" title="4、线程池中线程复用原理"></a>4、线程池中线程复用原理</h5><p>​	线程池中同一个线程去执行不同的任务就叫线程复用</p>
-<p>​	线程池中同一个线程可以从等待队列中不断获取新任务来执行。线程池对Thread进行了封装，并不是每个任务都会调用Thread.start()来执行，而是让每个线程去执行一个循环任务。在循环任务中不断检查是否有任务要被执行，如果有就直接执行，调用run方法【而不是新建线程】。</p>
-<h5 id="5、并发的三大特性"><a href="#5、并发的三大特性" class="headerlink" title="5、并发的三大特性"></a>5、并发的三大特性</h5><p>​	<strong>原子性</strong>：cas和atomic类、可以保证简单操作的原子性，复杂操作要加锁。</p>
-<p>​		如果要保证一个代码块的原子性，提供了monitorenter 和 moniterexit 两个字节码指令，也就是 synchronized 关键字。因此在 synchronized 块之间的操作都是原子性的。 【注意volatile是不能保证原子性的】</p>
-<p>​	<strong>可见性</strong>：多个线程访问同一个变量，一个线程修改了这个变量的值，其他线程应该要看到修改后的值。</p>
-<p>​		 Java是利用volatile关键字来提供可见性的。 当变量被volatile修饰时，这个变量被修改后会立刻刷新到主内存，当其它线程需要读取该变量时，会去主内存中读取新值。 【也可以使用final和synchronized实现】</p>
-<p>​	<strong>有序性</strong>：程序执行的顺序按照代码的先后顺序，禁止指令重排。</p>
-<p>​		 在Java中，可以使用synchronized或者volatile保证多线程之间操作的有序性。 </p>
-<p>​		【区别：volatile使用内存屏障来做到禁止指令重排序；synchronized使用加锁的方式做到】</p>
-<h5 id="6、ThreadLocal内存泄露原因，如何避免-？"><a href="#6、ThreadLocal内存泄露原因，如何避免-？" class="headerlink" title="6、ThreadLocal内存泄露原因，如何避免 ？"></a>6、ThreadLocal内存泄露原因，如何避免 ？</h5><p>​	由于threadlocal中map其中的key是一个弱引用，因此在gc回收掉一个threadlocal对象的时候，也就是key&#x3D;null时，key对应的value确是一个强引用，因此会一直存在于内存中无法被回收，造成了内存泄漏。</p>
-<p>​	ps. 对于key使用强引用也没用，当使用threadlocal的线程被回收之后，同样存在key-value在内存中无法回收的问题。</p>
-<p>​	所以在每次使用完之后要进行remove操作。</p>
-<h5 id="7、线程的生命周期？线程有几种状态"><a href="#7、线程的生命周期？线程有几种状态" class="headerlink" title="7、线程的生命周期？线程有几种状态"></a>7、线程的生命周期？线程有几种状态</h5><p>​	生命周期五种状态：new新建、runnable就绪、running运行、blockerd阻塞、terminated消亡；</p>
-<p>​	java中线程的六种状态：new新建、runnable【ready就绪、running运行】、blocked阻塞、waiting等待、time_waiting超时等待、terminated消亡。</p>
-<h5 id="8、有A-B-C三个线程，如何保证三个线程同时执行？如何在并发情况下保证三个线程依次执行？如何保证三个线程有序交错进行？"><a href="#8、有A-B-C三个线程，如何保证三个线程同时执行？如何在并发情况下保证三个线程依次执行？如何保证三个线程有序交错进行？" class="headerlink" title="8、有A,B,C三个线程，如何保证三个线程同时执行？如何在并发情况下保证三个线程依次执行？如何保证三个线程有序交错进行？"></a>8、有A,B,C三个线程，如何保证三个线程同时执行？如何在并发情况下保证三个线程依次执行？如何保证三个线程有序交错进行？</h5><p>​	同时执行：使用并发工具计数器锁CountDownLatch。就是等待计数器衰减为0的过程，每个线程执行一次计数器-1，计数器为0后结束等待一起运行。</p>
-<p>​	依次执行：使用volatile关键字，修饰三个线程的执行次数count</p>
-<p>​	交错执行：使用可重入锁</p>
-<h5 id="9、谈谈你对AQS的理解。AQS如何实现可重入锁？"><a href="#9、谈谈你对AQS的理解。AQS如何实现可重入锁？" class="headerlink" title="9、谈谈你对AQS的理解。AQS如何实现可重入锁？"></a>9、谈谈你对<strong>AQS</strong>的理解。AQS如何实现可重入锁？</h5><p>​	队列同步器 AbstractQueuedSynchronizer ：实现锁机制的基础，内部封装了锁的获取，释放，以及等待队列</p>
-<p>​	内置FIFO双向队列来完成资源获取线程的排队工作，并通过一个int类型变量表示持有锁的状态。 </p>
-<p>​	非公平锁在调用 lock 后，首先就会调用 CAS 进行一次抢锁，如果这个时候恰巧锁没有被占用，那么直接就获取到锁返回了。非公平锁在 CAS 失败后，和公平锁一样都会进入到 tryAcquire 方法，在 tryAcquire 方法中，如果发现锁这个时候被释放了（state &#x3D;&#x3D; 0），非公平锁会直接 CAS 抢锁，但是公平锁会判断等待队列是否有线程处于等待状态，如果有则不去抢锁，乖乖排到后面。<br>相对来说：非公平锁有更好的性能，但是可能会导致阻塞队列的线程长期处于饥饿状态。</p>
-<h5 id="10、并发、并行、串行的区别"><a href="#10、并发、并行、串行的区别" class="headerlink" title="10、并发、并行、串行的区别"></a>10、并发、并行、串行的区别</h5><p>​	串行：依次去完成这些任务，需要前一个任务完成后，才能继续下一个任务，依次完成所有任务</p>
-<p>​	并发：也是同一时间只能处理一个任务，但是可以每个任务轮流做【时间片轮转】</p>
-<p>​	并行：突破了同一时间只能处理一个任务的限制，可以同一时间做多个任务</p>
-<h5 id="11、JAVA如何开启多线程？怎么保证线程安全？"><a href="#11、JAVA如何开启多线程？怎么保证线程安全？" class="headerlink" title="11、JAVA如何开启多线程？怎么保证线程安全？"></a>11、JAVA如何开启多线程？怎么保证线程安全？</h5><p>​	一般三个方法：继承thread类、实现runnable接口、实现callable接口</p>
-<p>​	保证线程安全：简单的操作可以使用原子类等保证线程安全，复杂一点的操作可以加锁。</p>
-<h5 id="12、对线程安全的理解"><a href="#12、对线程安全的理解" class="headerlink" title="12、对线程安全的理解"></a>12、对线程安全的理解</h5><p>​	如果当前代码进程中有多个线程在同时运行，而这些线程会同时运行这段代码，如果每次运行结果和单线程运行结果是一致的，而且其他变量的值也和预期一致，那么这段代码就是线程安全的。 </p>
-<p>​	【多个线程访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都能得到正确的结果，那就说明这个对象是线程安全的】</p>
-<h5 id="13、什么是volatile？-volatile的理解。"><a href="#13、什么是volatile？-volatile的理解。" class="headerlink" title="13、什么是volatile？ volatile的理解。"></a>13、什么是volatile？ volatile的理解。</h5><p>​	相比于Synchronized<strong>重量锁</strong>来说，volatile是<strong>轻量锁</strong>；一般用于高并发下的单例模式；</p>
-<p>​	1、不保证原子性【要做什么事情就必须要做完】，如果需要保证原子性还是要加重量级锁</p>
-<p>​	2、保证内存可见性【多个线程访问一个变量时，一个线程修改了这个变量，其他线程能够立即看到修改的值】</p>
-<p>​		<strong>可见性原理</strong>：内存屏障实现。写一个volatile变量时，JMM会把线程本地内存中的变量强制刷新到主内存中去，而且会导致其他线程的volatile变量缓存无效。</p>
-<p>​	3、保证了有序性【禁止指令重排，程序的执行顺序必须按着代码的先后顺序执行】</p>
-<p>​	ps. 使用volatile修饰共享变量，在编译时会在指令序列中插入<strong>内存屏障</strong>来禁止特定类型的处理器重排序</p>
-<h5 id="14、sleep-、wait-、join-、yield-的区别"><a href="#14、sleep-、wait-、join-、yield-的区别" class="headerlink" title="14、sleep()、wait()、join()、yield()的区别"></a>14、sleep()、wait()、join()、yield()的区别</h5><p>​	yield操作就是放弃时间片，即将cpu的执行时间让给其他线程，放弃掉的线程只有在下一轮才能分配到时间片。</p>
-<p>​	sleep操作导致正在执行的线程暂时停止执行，如果在休眠前持有了线程锁，sleep不会释放锁。sleep会被打断</p>
-<p>​	wait使得当前线程一直等待，直到时间过去或者被唤醒notify。wait操作会释放锁</p>
-<p>​	join某个线程会使用join来等待另外一个线程的执行，直到另外线程执行完毕【A.join(B)】。会被打断。</p>
-<h5 id="15、对守护线程的理解"><a href="#15、对守护线程的理解" class="headerlink" title="15、对守护线程的理解"></a>15、对守护线程的理解</h5><p>​	线程分为守护线程和用户线程。用于一些后台任务，当进程退出时，这些任务没有任何意义，任务也不需要存在，这时候可以使用守护线程。【常见的守护线程就是垃圾回收线程】</p>
-<p>​	使用方法来说：守护线程启动前，需要setDaemon(true) 进行设置</p>
-<p>​	功能层面来说：守护线程不会影响jvm进程的退出，而用户线程有任务没有完成jvm是不会直接退出的。</p>
-<h5 id="16、简述线程池处理流程"><a href="#16、简述线程池处理流程" class="headerlink" title="16、简述线程池处理流程"></a>16、简述线程池处理流程</h5><p>​	首先线程池判断核心线程是否都在执行任务，如果不是就创建一个新的工作线程，如果是，则进入下一步</p>
-<p>​	然后判断等待队列是否满了，如果不满则新任务存储于等待队列，如果满了，则进入下一步</p>
-<p>​	最后判断线程池里的线程是否都在运行态，没有就创建一个新的工作线程执行，如果都在运行，则拒绝策略</p>
-<h5 id="17、线程池中阻塞队列的作用？为什么是先添加列队而不是先创建最大线程？"><a href="#17、线程池中阻塞队列的作用？为什么是先添加列队而不是先创建最大线程？" class="headerlink" title="17、线程池中阻塞队列的作用？为什么是先添加列队而不是先创建最大线程？"></a>17、线程池中阻塞队列的作用？为什么是先添加列队而不是先创建最大线程？</h5><p>​	一般的队列，只能是有限长度的缓冲区，如果超出了缓冲长度，就无法保留数据。但是阻塞队列通过阻塞可以保留住当前想要继续入队的任务。</p>
-<p>​	在创建新线程时要获取全局锁，这时候其他线程会被阻塞，影响整体效率。</p>
-<p>​	核心线程满了的时候，任务继续添加会放在队列中，队列满了任务还在增加，就创建临时线程，这样代价低。 </p>
-<h5 id="18、为什么用线程池？解释下线程池参数？"><a href="#18、为什么用线程池？解释下线程池参数？" class="headerlink" title="18、为什么用线程池？解释下线程池参数？"></a>18、为什么用线程池？解释下线程池参数？</h5><p>​	有的程序需要频繁地创建新的线程和销毁旧线程，而创建和销毁线程都需要大量的开销，因此引入线程池。</p>
-<p>​	线程池7大参数：</p>
-<p>​	1、corePoolSize：核心线程池大小【每向线程池提供一个多线程任务，就会创建一个新的核心线程】</p>
-<p>​	2、maximumPoolSize：最大线程池大小【线程池中所有核心线程都在运行并且等待队列满了，会尝试创建非		  核心线程运行，但是不能超过本值】</p>
-<p>​	3、keepAliveTime：线程最大空闲时间【非核心线程空闲时间超过这个值会自动销毁】</p>
-<p>​	4、unit：线程最大空闲时间的单位</p>
-<p>​	5、workQueue：线程等待队列【核心线程满了，任务就会暂存于等待队列】</p>
-<p>​	6、threadFactory：线程创建工厂</p>
-<p>​	7、handler：拒绝策略【线程池和等待队列都没空间了，就需要设置拒绝策略】</p>
-<h5 id="19、ThreadLocal的原理和使用场景"><a href="#19、ThreadLocal的原理和使用场景" class="headerlink" title="19、ThreadLocal的原理和使用场景"></a>19、ThreadLocal的原理和使用场景</h5><p>​	ThreadLocal用于线程和变量之间的绑定，每个线程只能读写本线程所对应的副本变量，为了线程安全。</p>
-<p>​	ThreadLocal看成线程本地变量，每个线程中定义了一个Map对象，其中的Key是当前的线程，而value则是变量的值。类提供了set、get、remove三个方法间接地操作Map对象。</p>
-<p>​	应用场景：全局存储用户信息、在重入方法中替代参数的显式传递。</p>
-<h5 id="20、Synchronized实现原理"><a href="#20、Synchronized实现原理" class="headerlink" title="20、Synchronized实现原理"></a>20、Synchronized实现原理</h5><p>​	Synchronized的语义底层还是通过一个Monitor对象来完成，任何一个对象都有一个Monitor与之关联，当且一个Monitor被持有后，将处于锁定状态。而Monitor又是通过成对的MonitorEnter和MonitorExit指令来实现，MonitorEnter插入在同步代码块的开始位置，当代码执行到该指令时，将会尝试对象Monitor的所有权【即获得该对象的锁】而MoniteorExit则执行在方法结束和异常处。</p>
-<p>​	Synchronized关键字在经过javac编译后，会在同步块的前后分别形成monitorenter和monitorexit两个字节码指令，这两个字节码指令都需要一个reference类型的参数来指明要锁定和解锁的对象</p>
-<h5 id="21、公平锁和非公平锁"><a href="#21、公平锁和非公平锁" class="headerlink" title="21、公平锁和非公平锁"></a>21、公平锁和非公平锁</h5><p>​	默认的ReentrantLock【可重入锁】是采用的非公平锁作为的底层机制</p>
-<p>​	公平锁：多个线程按着申请锁的顺序去获得锁，线程回直接进入队列去排队，永远是队列的第一位才能获得锁</p>
-<p>​	非公平锁：多个线程去获取锁的时候，会直接去尝试获取，获取不到进入等待队列，如果能取到直接获取到锁</p>
-<p>​	简单的说，公平锁不让插队，非公平锁需要插队，但是要看被人能不能让你插得到</p>
-<h5 id="22、读写锁【属于共享锁】"><a href="#22、读写锁【属于共享锁】" class="headerlink" title="22、读写锁【属于共享锁】"></a>22、读写锁【属于共享锁】</h5><p>​	读写锁不是排他锁，在同一时间可以让多个线程获取到锁，针对于读写场景而出现。其维护了一个读锁和写锁</p>
-<p>​	读锁：没有任何线程占用写锁的情况下，同一时间可以有多个线程加读锁</p>
-<p>​	写锁：没有任何线程占用写锁的情况下，同一时间只能有一个个线程加写锁</p>
-<h5 id="23、乐观锁和悲观锁"><a href="#23、乐观锁和悲观锁" class="headerlink" title="23、乐观锁和悲观锁"></a>23、乐观锁和悲观锁</h5><p>​	乐观锁：每次去拿数据都认为别人不会修改，所以不加锁；但是在更新时会判断期间有没有人更新过数据；一般通过CAS实现；</p>
-<p>​	悲观锁：每次去拿数据都认为别人会修改，所以每次拿数据时都会上锁。</p>
-<h5 id="24、可重入锁、自旋锁、独占锁、共享锁？"><a href="#24、可重入锁、自旋锁、独占锁、共享锁？" class="headerlink" title="24、可重入锁、自旋锁、独占锁、共享锁？"></a>24、可重入锁、自旋锁、独占锁、共享锁？</h5><p>​	可重入锁【递归锁】： 同一线程在外层函数获取锁以后，进入内层函数时自动获取锁.其作用是避免死锁</p>
-<p>​	自旋锁： 获取不到锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁，好处是减少上下文切换的消耗，坏处是消耗CPU </p>
-<p>​	独占锁： 每次只允许一个线程获取锁，如 synchronized和ReentrantLock </p>
-<p>​	共享锁： 允许多个线程同时获取锁，如读写锁（ReadWriteLock） </p>
-<h5 id="25、进程和线程？"><a href="#25、进程和线程？" class="headerlink" title="25、进程和线程？"></a>25、进程和线程？</h5><p>​	进程： 计算机程序在一个数据集上的一次运行过程，也是资源分配和调度的基本单位 </p>
-<p>​	线程：进程中的一个执行单元，一个进程中至少有一个线程</p>
-<h5 id="26、死锁是什么？产生死锁的四个条件？"><a href="#26、死锁是什么？产生死锁的四个条件？" class="headerlink" title="26、死锁是什么？产生死锁的四个条件？"></a>26、死锁是什么？产生死锁的四个条件？</h5><p>​	多个线程或者进程在执行过程中，因争夺资源造成的一直互相等待的现象，如果没有外力打破，他们将无法进行下去。</p>
-<p>​	1、互斥条件	2、请求与保持条件	3、不剥夺条件	4、循环等待条件</p>
-<h5 id="27、notify-和-notifyAll？"><a href="#27、notify-和-notifyAll？" class="headerlink" title="27、notify 和 notifyAll？"></a>27、notify 和 notifyAll？</h5><p>​	notify唤醒一个等待状态的线程【具体不知道唤醒哪一个，由jvm决定】</p>
-<p>​	notifyAll唤醒所有处于等待状态的线程【让他们一起竞争对象的锁，获得锁的才能进入就绪状态】</p>
-<h5 id="28、CAS是什么？为什么使用CAS代替synchronized？"><a href="#28、CAS是什么？为什么使用CAS代替synchronized？" class="headerlink" title="28、CAS是什么？为什么使用CAS代替synchronized？"></a>28、CAS是什么？为什么使用CAS代替synchronized？</h5><p>​	CAS： 当且仅当对象偏移量上的值和预期值相等时，才会用更新值，否则不执行更新。但是无论是否更新了内存上的值，最终都会返回内存上的旧值。CAS是一条CPU原语，执行是连续的，因此保证了原子性。 </p>
-<p>​	原因： synchronized加锁，同一时间段只允许一个线程访问，能够保证一致性但是并发性下降。而是用CAS算法使用do-while不断判断而没有加锁（实际是一个自旋锁），保证一致性和并发性。 </p>
-<h5 id="29、CAS的缺点？ABA问题？如何解决？"><a href="#29、CAS的缺点？ABA问题？如何解决？" class="headerlink" title="29、CAS的缺点？ABA问题？如何解决？"></a>29、CAS的缺点？ABA问题？如何解决？</h5><p>​	缺点：1、cas失败则会一直尝试，产生额外cpu开销	2、只能一个共享变量的原子操作	3、产生ABA问题</p>
-<p>​	<strong>ABA问题</strong>： 如果一个线程在初次读取时的值为A，并且在准备赋值的时候检查该值仍然是A，但是可能在这两次操作之间，有另外一个线程现将变量的值改成了B，然后又将该值改回为A，那么CAS会误认为该变量没有变化过。 【一般使用带时间戳的原子引用解决】</p>
-<h5 id="30、synchronized和ReentrantLock的区别"><a href="#30、synchronized和ReentrantLock的区别" class="headerlink" title="30、synchronized和ReentrantLock的区别"></a>30、synchronized和ReentrantLock的区别</h5><p>​	1、前者是关键字，jvm级别；后者是类，api层面；</p>
-<p>​	2、前者不需要手动释放，系统执行完自动释放；后者需要加锁解锁，否则容易出现死锁；</p>
-<p>​	3、前者不能中断，除非正常完成或者抛出异常；后者可以被中断；</p>
-<p>​	4、前者是非公平锁；后者默认公平锁【但是可以设置为非公平】；</p>
-<p>​	5、前者不能绑定条件，后者可以绑定多个condition，实现精确唤醒；</p>
-<h5 id="31、线程池的拒绝策略？"><a href="#31、线程池的拒绝策略？" class="headerlink" title="31、线程池的拒绝策略？"></a>31、线程池的拒绝策略？</h5><p>​	AbortPolicy(默认)：直接抛出RejectedExecutionException异常阻止系统正常运行<br>​	CallerRunsPolicy：调用者运行的一种机制，策略既不抛弃任务，也不抛出异常，而是将某些任务回退到调用者<br>​	DiscardOldestPolicy：抛弃队列中等待最久的任务，然后把当前任务加入到队列中尝试再次提交当前任务<br>​	DiscardPolicy：直接丢弃任务，不予任何处理也不抛出异常。如果任务允许丢失，那么该策略是最好的方案</p>
-
+<p>​	同步工具：类似的 <strong>Semaphore</strong>类代表信号量,可以控制同时访问特定资源的线程数量；<strong>CountDownLatch</strong>类则允许一个或多个线程等待其他线程完成操作；<strong>CyclicBarrier</strong>可以让一组线程到达一个屏障时被阻塞,直到最后一个线程到达屏障时,屏障才会打开,所有被屏障拦截的线程才会继续运行。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/17/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -447,10 +365,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-17 23:50:09 / 修改时间：23:51:07" itemprop="dateCreated datePublished" datetime="2022-08-17T23:50:09+08:00">2022-08-17</time>
+              <time title="创建时间：2022-08-17 23:50:09" itemprop="dateCreated datePublished" datetime="2022-08-17T23:50:09+08:00">2022-08-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:05:19" itemprop="dateModified" datetime="2022-08-18T15:05:19+08:00">2022-08-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -473,136 +397,15 @@
 
       
           <p>1、说一说JVM的内存模型JMM（java memory mode）？</p>
-<p>​	 JVM 试图定义一种统一的内存模型，能将各种底层硬件以及操作系统的内存访问差异进行封装，使 Java 程序在不同硬件以及操作系统上都能达到相同的并发效果。它分为工作内存和主内存，规定所有所有变量都存储在主内存中【不包括局部变量和方法参数】， 每个线程都有自己的工作内存，线程的工作内存保存了该线程用到的变量和主内存的副本拷贝，线程对变量的操作都在工作内存中进行。 线程无法对主存储器直接进行操作，如果一个线程要和另外一个线程通信，那么只能通过主存进行交换。 </p>
-<p>2、什么是类加载器，类加载器有哪些? </p>
-<p>​	虚拟机设计团队把加载动作放到虚拟机外部实现，以便让应用程序决定如何获取所需的类。这个外部实现就是类加载器。</p>
-<p>​	jvm提供了三个类加载器：</p>
-<p>​	启动类加载器bootstrap bootloader：加载java核心类库，无法被java程序直接引用</p>
-<p>​	扩展类加载器extension bootloader：加载java扩展库</p>
-<p>​	应用程序类加载器application bootloader：</p>
-<p>​	【一个类可以被不同的类加载器加载，并且不同的加载器加载出来的类，即使来自同一个class文件，也是不同的】</p>
-<p>3、什么是STW？他都发生在哪些阶段？ </p>
-<p>​	stop the world ，在垃圾回收算法的执行过程中，将jvm内存冻结，应用程序停顿的一种状态。</p>
-<p>​	所有的垃圾收集器都会发生stw状态，能做的就是尽可能优化这个时间，在可达性分析算法枚举gcroot节点的时候就会进入stw状态。</p>
-<p>​	cms在初始标记和重复标记节点会造成stw现象。</p>
-<p>4、一个对象从加载到JVM，再到被GC清除，都经历了什么过程？</p>
-<p>​	1、用户创建一个对象，jvm首先需要到方法区去找对象的类信息，然后再创建对象。</p>
-<p>​	2、jvm实例化对象，首先在堆中先创建一个对象（为了优化，有的对象会放到栈中，生命周期变得简单，不用GC介入就可以清理对象）。-&gt;半初始化状态（变量默认值）</p>
-<p>​	3、对象首先会分配在堆内存中新生代的Eden区。然后经过依次（新生代GC）Minor GC，对象如果存活，就会进入S区，在后续的每次GC中，如果对象一直存活，就会在S区来回拷贝，每移动一次，年龄加1（对象头里4bit存放分代年龄，最大15），超过一定年龄后，对象转入老年代。</p>
-<p>​	4、当方法执行结束后，栈中的指针会移除掉。</p>
-<p>​	5、堆中的对象，经过Full GC，就会被标记为垃圾，然后被GC线程清理掉。 </p>
-<p>5、什么是GC Root? </p>
-<p>​	代码中的对象之间都是有一定的关联的，他们之间互相构成一个有向图，我们去遍历这个有向图，能够遍历到的就不是垃圾【说明存在引用】，否则就是垃圾；gcroots就是遍历这个有向图的起始位置。</p>
-<p>​	常见的作为gcroots的对象：1、虚拟机栈中栈帧的局部变量表	2、常量池中引用的对象	3、方法区中静态变量引用的对象	4、本地方法栈中引用的对象</p>
-<p>6、怎么确定一个对象到底是不是垃圾？ </p>
-<p>​	gc 判断对象可以回收：引用计数法和可达性分析算法</p>
-<p>​	引用计数法：在对象中添加一个引用计数器，该对象被引用时，计数器加一；当一处引用失效时，计数器值减一。在任意时刻，计数器为0的对象就是不能再被引用的，由此判断该对象可以被回收。</p>
-<p>​	可达性分析算法：通过一系列称为 “gcroots” 的根对象作为起始点，根据引用关系向下搜索，搜索过程路径称为引用链。如果某个对象到 gcroots 不存在任何引用链的话，判定为该对象到 gcroots 不可达，即需要被回收。</p>
-<p>8、JAVA类加载的全过程是怎样的？ </p>
-<p>​	1、加载：把Java的字节码数据加载到jvm内存当中，并映射成jvm认可的数据结构。</p>
-<p>​	2、验证：确保class文件的字节流中的信息不会危害到虚拟机的运行。一般做一些格式验证，字节码验证，元数据验证等。</p>
-<p>​	3、准备：为类的静态变量分配内存及初始化默认值。</p>
-<p>​	4、解析：完成常量池内符号引用到直接引用的转换动作。这步骤可能在初始化之前完成也可能在初始化之后完成</p>
-<p>​	5、初始化：类加载最后一步，开始真正执行类定义中的java代码</p>
-<p>​	6、使用</p>
-<p>​	7、卸载</p>
-<p>9、如何解决错标记和漏标记的问题？ </p>
-<p>​	 CMS：写屏障 + 增量更新，当对象D的成员变量的引用发生变化时（objD.fieldG &#x3D; G;），我们可以利用写屏障，当D是黑色G是白色的话将D标为灰色，等待遍历，即增量更新（Incremental Update） </p>
-<p>10、怎么查看一个JAVA进程的JVM参数？ </p>
-<p>​	jps ：显示本地的java进程</p>
-<p>​	jinfo：查看运行环境参数</p>
-<p>​	jmap：观察运行中jvm的物理内存占用情况；</p>
-<p>​	jstat：监视虚拟机各种运行状态工具</p>
-<p>11、JVM参数有哪些？ </p>
-<p>​	-Xms：堆区初始内存分配大小</p>
-<p>​	-Xmx：堆内存最大限制【设定新生代大小，不易太小，否则有大量对象涌入老年代】</p>
-<p>​	-Xss：栈大小分配</p>
-<p>​	-XX:NewSize：新生代大小</p>
-<p>​	-XX:NewRatio：新生代和老年代占比</p>
-<p>​	-XX:SurvivorRatio：eden和幸存者空间的占比</p>
-<p>12、内存模型以及分区，需要详细到每个区放什么。 </p>
-<p>​	jvm的内存分区分别为运行时数据区，执行引擎和本地库接口。</p>
-<p>​	运行时数据区看22。</p>
-<p>13、什么是双亲委派机制？有什么作用？ </p>
-<p>​	当一个字节码文件需要被加载时，会从下到上【AppClassLoader    -&gt;         ExtClassLoader          -&gt;   BootstrapClassLoader】依次检查该类加载器是否加载过该字节码文件，并不会选择自己加载。如果到了最顶部发现都没有加载过该class文件，则从上到下依次判断自己能否加载该class文件，可以加载直接加载。如果到最下面发现没有加载器能够加载此class文件，则直接报错class not found。</p>
-<p>​	好处：一定程度防止修改系统级别的类，从上到下检查的时候修改了系统类的实现【自己写的系统类根本没有办法被加载到，比如说system类由bootstrap加载器加载，自己写一个system类的话，最上层的bootstarp会检查自己是否加载过而进行加载，下层的加载器没有机会加载这个自己写的类】，但是一般的类都被顶层的加载器加载过了，所以下层的加载器一般没有机会再去加载，从一定程度上防止了危险代码的植入。</p>
-<p>​	避免重复加载</p>
-<p>14、什么是三色标记？ </p>
-<p>​	从gcroots进行可达性算法分析时，将遍历对象图中遇到的对象，按照是否访问过可以分为三种颜色；</p>
-<p>​	白色指尚未被gc访问过的对象，全部标记完依旧为白色的话就是不可达对象，需要被回收</p>
-<p>​	黑色指已被gc访问过，且当前对象的子对象也被访问过了，标记为黑色。</p>
-<p>​	灰色指本对象已被gc访问过，但是子对象还未访问过，当前对象处于中间态。</p>
-<p>​	可能会产生对象消失的问题【漏标】：灰色对象切断了和下一个对象的引用关系，而黑色对象却和下一个建立了新的引用关系，导致黑色对象下的不在会被扫描，可能会导致实际存活的下一个对象死亡。</p>
-<p>16、JVM有哪些垃圾回收器？他们都是怎么工作的？ </p>
-<p>​	ParNew&#x2F;CMS：新生代并行回收，效率提升，老年代并发回收，STW时间急剧降低。ParNew仍然会STW，CMS会产生内存碎片，无法处理并发清除阶段产生的垃圾，吞吐量不高 </p>
-<p>​	Serial&#x2F;Serial Old：串行回收，简单高效，只适合单CPU </p>
-<p>   Parallel&#x2F;Parallel Old：并行回收，吞吐量优先，可以控制吞吐量及自适应调节策略。但暂停时间会变高，响应慢 </p>
-<p>   CMS：并发标记清除的GC，使用的是标记清除算法，与用户线程并发执行，无需STW，能达到低延迟的目标 </p>
-<p>​		cms的几个阶段：1、初始标记	2、并发标记	3、重新标记	4、并发清理</p>
-<p>   G1：基于分区算法，同样是分代收集，无内存碎片，可预测的停顿时间模型，同时实现并行与并发。但在堆内存过小时表现不良好，只有在大堆环境下优势俞明显，且内存占用较高 </p>
-<p>17、什么情况下会发生栈内存溢出。 </p>
-<p>​	虚拟机栈会在方法调用时插入栈帧，如果出现无限递归的情况，将虚拟机栈塞满，就会报栈溢出stack overflow error</p>
-<p>18、简述 jvm的分代回收策略以及 Minor GC 和 Major GC </p>
-<p>​		jvm将堆内存划分为新生代、老年代和永久代【永久代是HotSpot虚拟机特有的概念，在JDK8之前方法区实际上就是采用的永久代作为实现，而在JDK8之后，方法区由元空间实现，并且使用的是本地内存，容量大小取决于物理机实际大小】</p>
-<p>​	hotpot虚拟机中，新生代被分为eden区和survivor区；所有新创建的对象，首先会进入新生代的eden区，进行新生代的gc时，直接回收中间不在使用的对象。之后eden中剩下的没有回收的对象进入survivor区中的from部分【survivor区中分为from和to区】，之后from和to进行一次交换，接下来重复以上步骤，每经历一轮gc其年龄+1，如果对象年龄大于默认值15，则直接进入老年代。</p>
-<p>​	垃圾搜集也分为minor gc、major gc 和 full gc</p>
-<p>​	minor gc：次要垃圾回收，主要进行新生代的垃圾搜集。【触发条件为新生代eden区满了时】</p>
-<p>​	major gc：主要垃圾回收，主要进行老年代的垃圾搜集</p>
-<p>​	full gc：完全垃圾回收，对整个java堆内存和方法区进行垃圾回收。</p>
-<p>19、为什么要设计这么多的垃圾回收器？ </p>
-<p>​	内存不断增大。。。</p>
-<p>20、JVM有哪些垃圾回收算法？ </p>
-<p>​	1、标记清除：直接将标记的区域中的内存释放，简单高效但是会造成内存碎片问题。</p>
-<p>​	2、标记复制：将内存区域划为2个区域，直接复制不是垃圾的对象到另一个区域，很好的解决内存碎片问题，但是相当于只用了一半内存，需要额外的内存空间。</p>
-<p>​	3、标记整理：类似于数组删除数据，所有存活的对象往前移动，然后直接清理死亡一端的内存；不需要额外的内存空间也不产生内存碎片，但是搬运效率低不适合频繁使用。</p>
-<p>21、如何进行JVM调优？ </p>
-<p>​	一些工具：jdk自带的jconcole，jvisualvm；eclipse提供的MAT；GChisto，gcviewer等。</p>
-<p>22、运行时数据区？</p>
-<p>​	虚拟机栈【存放的栈帧用于存储局部变量表，操作数栈，动态链接等信息；它是线程私有的】</p>
-<p>​	本地方法栈【与虚拟机栈作用相似，区别就是本地方法栈为虚拟机】</p>
-<p>​	堆空间： JVM内存管理最大的一块,核心区域；被线程共享,用于存放对象们的的实例；根据对象的存活周期不同,JVM把对象进行分代管理,由垃圾回收器进行垃圾的回收管理 ；【可以设置大小】</p>
-<p>​	方法区：永久代，存储被 JVM 加载的类信息、常量、静态变量即、时编译器编译后的代码等数据，也是线程共享. 【hotspot把gc分代扩展至方法区，即使用java堆的永久代来实现方法区】</p>
-<p>​	程序计数器【看作当前线程所执行的字节码的行号指示器。】</p>
-<p>23、破坏双亲委派机制</p>
-<p>​	1、自定义类加载器，重写父类的loadClass方法</p>
-<p>​	2、使用线程上下文类加载器【ThreadContextClassLoader】:主要原理 spi服务发现机制</p>
-<p>24、GC如何判断对象可以被回收 </p>
-<p>​	确认对象是否还活着是否死了—&gt;引用计数法和可达性分析算法</p>
-<p>​	引用计数法：在对象中添加一个引用计数器，该对象被引用时，计数器加一；当一处引用失效时，计数器值减一。在任意时刻，计数器为0的对象就是不能再被引用的，由此判断该对象可以被回收。</p>
-<p>​	可达性分析算法：通过一系列称为“gcroots”的根对象作为起始点，根据引用关系向下搜索，搜索过程路径称为引用链。如果某个对象到 gcroots 不存在任何引用链的话，判定为该对象到 gcroots 不可达，即需要被回收。</p>
-<p>​	*固定作为 gcroots 的对象：</p>
-<p>25、Java类加载器 </p>
-<p>​	在运行时负责将 java 类动态地加载到 jvm。类加载器是 jre 的一部分。由于类加载器，可以让 jvm 不要知道底层文件或者文件系统就能够运行 java 程序。</p>
-<p>26、对象的内存布局？</p>
-<p>​	 对象在堆内存的存储布局可分为对象头、实例数据和对齐填充。 </p>
-<p>​	 <strong>对象头</strong>占12B，包括对象标记和类型指针。<strong>对象标记</strong>存储对象自身的运行时数据，如哈希码、GC 分代年龄、锁标志、偏向线程 ID 等，这部分占 8B，称为 Mark Word。<strong>Mark Word</strong> 被设计为动态数据结构，以便在极小的空间存储更多数据，根据对象状态复用存储空间；<strong>类型指针</strong>是对象指向它的类型元数据的指针，占 4B。JVM 通过该指针来确定对象是哪个类的实例。 </p>
-<p>​	 <strong>实例数据</strong>是对象真正存储的有效信息，即本类对象的实例成员变量和所有可见的父类成员变量。存储顺序会受到虚拟机分配策略参数和字段在源码中定义顺序的影响。相同宽度的字段总是被分配到一起存放，在满足该前提条件的情况下父类中定义的变量会出现在子类之前。 </p>
-<p>​	 <strong>对齐填充</strong>不是必然存在的，仅起占位符作用。虚拟机的自动内存管理系统要求任何对象的大小必须是 8B 的倍数，对象头已被设为 8B 的 1 或 2 倍，如果对象实例数据部分没有对齐，需要对齐填充补全。 </p>
-<p>27、谈谈永久代？</p>
-<p>​	jdk8之前hotspot中方法区使用永久代实现</p>
-<p>​	jdk7开始把原本放在永久代的字符串常量池、静态变量等移出到堆，JDK 8 开始去除永久代，使用元空间（Metaspace），永久代剩余内容移至元空间，元空间直接在本地内存分配。</p>
-<p>28、什么是内存屏障？</p>
-<p>​	内存屏障，是一种CPU指令，用于控制特定条件下的重排序和内存可见性问题。</p>
-<p>​	LoadLoad屏障：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。</p>
-<p>​	StoreStore屏障：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。</p>
-<p>​	LoadStore屏障：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。</p>
-<p>​	StoreLoad屏障：对于这样的语句Store1; StoreLoad; Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。【它的开销是四种屏障中最大的。在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能】</p>
-<p>29、 强引用、软引用、弱引用、虚引用是什么？</p>
-<p>​	强引用：我们使用的大部分引用实际上都属于强引用，内存不足jvm宁愿抛异常也不会回收具有强引用的对象来解决问题，例如String str &#x3D; “abc”; list.add(str);	都是强引用。</p>
-<p>​	软引用：如果内存空间足够，jvm就不会回收它，但是内存空间不足是时就会回收这些对象的内存。【可用来实现内存敏感的高速缓存】</p>
-<p>​	弱引用：和软引用相似，但是弱引用对象具有更短的生命周期，一旦被垃圾回收器扫描到就会被回收【不管内存是否足够】</p>
-<p>​	虚引用： 虚引用并不会决定对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收。虚引用主要用来跟踪对象被垃圾回收的活动。虚引用与软引用和弱引用的一个区别在于：虚引用必须和引用队列（ReferenceQueue）联合使用。 </p>
-<p>30、G1垃圾搜集器？</p>
-<p>​	”垃圾回收第一“； G1 可以<strong>「面向堆内存的任何空间来进行」</strong>回收 ，根据哪块<strong>「空间的垃圾最多」</strong>就回收哪块儿空间 ；</p>
-<p>31、什么情况会栈溢出？</p>
-<p>​	1、 如果线程请求分配的栈容量超过 Java 虚拟机栈允许的最大容量的时候</p>
-<p>​	2、 如果 Java 虚拟机栈可以动态拓展，并且扩展的动作已经尝试过，但是目前无法申请到足够的内存去完成拓展，或者在建立新线程的时候没有足够的内存去创建对应的虚拟机栈</p>
-<p>32、如何排查oom问题？</p>
-<p>​	java_options变量中添加  -XX:+HeapDumpOnOutOfMemoryError 和XX:HeapDumpPath&#x3D;&#x2F;tmp&#x2F;xxxx.hprof </p>
-<p>​	oom发生时自动dump堆内存信息到指定目录；</p>
-<p>​	jstat查看jvm的内存和gc情况，观察问题大概出现什么区域；</p>
-<p>​	工具载入到dump文件，分析对象占用情况。</p>
-
+<p>​	 JVM 试图定义一种统一的内存模型，能将各种底层硬件以及操作系统的内存访问差异进行封装，使 Java 程序在不同硬件以及操作系统上都能达到相同的并发效果。它分为工作内存和主内存，规定所有所有变量都存储在主内存中【不包括局部变量和方法参数】， 每个线程都有自己的工作内存，线程的工作内存保存了该线程用到的变量和主内存的副本拷贝，线程对变量的操作都在工作内存中进行。 线程无法对主存储器直接进行操作，如果一个线程要和另外一个线程通信，那么只能通过主存进行交换。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/17/java%E8%99%9A%E6%8B%9F%E6%9C%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
